@@ -3,6 +3,7 @@ const BtnLogin = document.querySelector('.btn-login');
 const BtnCreate = document.querySelector('.btn-create');
 const textNoItem = document.querySelector('.no-item');
 const filter = document.querySelector('.filter');
+const containerCards = document.querySelector('.cards');
 
 checkToken();
 
@@ -93,6 +94,9 @@ function AuthorizationCall(formConfrimCheck, PopUpWindow) {
 		}
 	});
 }
+function removeElement(el) {
+	el.remove();
+}
 
 function checkToken() {
 	let getToken = localStorage.getItem('token');
@@ -102,9 +106,20 @@ function checkToken() {
 		BtnLogin.style.display = 'none';
 		textNoItem.remove();
 		filter.style.display = 'flex';
+		getData(getToken);
 	}
 }
 
-function removeElement(el) {
-	el.remove();
+async function getData(token) {
+	const response = await fetch('https://ajax.test-danit.com/api/cards', {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	const data = await response.json();
+
+	render(data);
+}
+function render(items) {
+	console.log(items);
 }
