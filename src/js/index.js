@@ -109,17 +109,3 @@ function checkToken() {
 		getData(getToken);
 	}
 }
-
-async function getData(token) {
-	const response = await fetch('https://ajax.test-danit.com/api/cards', {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-	const data = await response.json();
-
-	render(data);
-}
-function render(items) {
-	console.log(items);
-}
