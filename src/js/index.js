@@ -7,6 +7,33 @@ const containerCards = document.querySelector('.cards');
 
 checkToken();
 
+// ----------------------------------------------------------------------------------
+// Test POST example
+
+// async function testPOST(tok) {
+// 	let obj = {
+// 		name: 'John Dye',
+// 		doctor: 'Pediatr',
+// 	};
+// 	const response = await fetch('https://ajax.test-danit.com/api/v2/cards', {
+// 		method: 'POST',
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 			Authorization: `Bearer ${tok}`,
+// 		},
+// 		body: JSON.stringify(obj),
+// 	});
+
+// 	if (response.status === 200) {
+// 		console.log('POST the data to server');
+// 	}
+// }
+
+// testPOST(tok);
+// problem создаетсья два массива {[name: "John Dye"m doctor: "Pediatr"], [name: "John Dye"m doctor: "Pediatr"]}
+
+// ------------------------------------------------------------------------------------
+
 class popUpModal {
 	constructor(parentEl) {
 		this.item = document.createElement('div');
@@ -120,5 +147,27 @@ async function getData(token) {
 	render(data);
 }
 function render(items) {
-	console.log(items);
+	containerCards.innerHTML = '';
+	items.forEach((item) => {
+		let name = item.content.name;
+		let doctor = item.content.doctor;
+		const cardContainer = document.createElement('div');
+		cardContainer.classList.add('card');
+		cardContainer.insertAdjacentHTML(
+			'beforeend',
+			`	<p class="name">${name}</p>
+				<p class="doctor">${doctor}</p>`
+		);
+		containerCards.appendChild(cardContainer);
+	});
 }
+
+// function testDELETE(items) {
+// 	console.log(items);
+// }
+// fetch('https://ajax.test-danit.com/api/v2/cards/4117', {
+// 	method: 'DELETE',
+// 	headers: {
+// 		Authorization: 'Bearer 2c13322e-7afc-47be-aa96-4bda80f5585a',
+// 	},
+// });
