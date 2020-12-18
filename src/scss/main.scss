@@ -107,11 +107,12 @@ body {
 
 .modalDiv {
 	position: absolute;
+	padding: 20px;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 300px;
-	height: 200px;
+	min-height: 200px;
 	z-index: 10;
 	border: 3px solid black;
 	border-radius: 10px;
@@ -139,5 +140,43 @@ body {
 	}
 	to {
 		opacity: 1;
+	}
+}
+
+
+// VISIT
+
+.visit-form,
+.card-info{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.visit-form{
+	& label{
+		display: flex;
+		width: 100%;
+		justify-content: space-between;
+		margin-bottom: 5px;
+	}
+
+	& select{
+		margin: 0 auto;
+	}
+
+	& input,
+	& textarea{
+		min-width: 60%;
+		width: 60%;
+		justify-self: right;
+	}
+}
+
+.btn-wrapper{
+	display: flex;
+	justify-content: space-around;
+	& button{
+		margin: 0 10px;
 	}
 }
