@@ -165,7 +165,7 @@ function render(items) {
 // function testDELETE(items) {
 // 	console.log(items);
 // }
-// fetch('https://ajax.test-danit.com/api/v2/cards/4117', {
+// fetch('https://ajax.test-danit.com/api/v2/cards/4116', {
 // 	method: 'DELETE',
 // 	headers: {
 // 		Authorization: 'Bearer 2c13322e-7afc-47be-aa96-4bda80f5585a',
