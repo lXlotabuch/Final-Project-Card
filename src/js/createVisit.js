@@ -1,71 +1,89 @@
 const btnCreate = document.querySelector(".btn-create");
-
 btnCreate.addEventListener("click", addVisitWindow);
 
 class Visit {
   constructor(parentEl) {
     this.parentEl = parentEl;
+
     this.wrapper = document.createElement("form");
     this.wrapper.classList.add("visit-form");
 
-    this.item = document.createElement("select");
-    this.item.classList.add("doctor");
-    this.item.innerHTML = `
-            <option selected value="null"></option>
-            <option value="cardiolog">Cardiolog</option>
-            <option value="dantist">Dantist</option>
-            <option value="terapist">Terapist</option>
-        `;
+    this.cardInfo = document.createElement("div");
+    this.cardInfo.classList.add("card-info");
+
+    this.item = new Select("doctor", "Doctor", [
+      "Cardiolog",
+      "Dantist",
+      "Terapist",
+    ]);
+
     this.item.addEventListener("change", (e) => {
       e.preventDefault();
 
-      if (e.target.value === "dantist") {
+      if (e.target.value.toLowerCase() === "dantist") {
         const visitToDantist = new VisitDantist();
       }
 
-      if (e.target.value === "terapist") {
+      if (e.target.value.toLowerCase() === "terapist") {
         const visitToTerapist = new VisitTerapist();
       }
 
-      if (e.target.value === "cardiolog") {
+      if (e.target.value.toLowerCase() === "cardiolog") {
         const visitToCardiolog = new VisitCardiolog();
       }
     });
 
-    this.priority = document.createElement("select");
-    this.priority.classList.add("priority-visit");
-    this.priority.innerHTML = `
-        <option selected value="null"></option>
-        <option value="low">low</option>
-        <option value="middle">middle</option>
-        <option value="high">high</option>    
-    `;
+    this.priority = new Select("priority", "Priority", [
+      "low",
+      "middle",
+      "high",
+    ]);
 
-    this.targetOfVisit = document.createElement("input");
-    this.targetOfVisit.type = "text";
-    this.targetOfVisit.placeholder = "The purpose of the visit";
-    this.targetOfVisit.classList.add("target-visit");
+    this.targetOfVisit = new Input(
+      "text",
+      "targetOfVisit",
+      "Why u come?",
+      "The purpose of the visit",
+    );
 
-    this.descriptionOfVisit = document.createElement("textarea");
-    this.descriptionOfVisit.classList.add("description-visit");
-    this.descriptionOfVisit.name = "description-visit";
-    this.descriptionOfVisit.cols = "20";
-    this.descriptionOfVisit.rows = "5";
+    this.descriptionOfVisit = new TextArea(
+      "description",
+      "Description",
+      "20",
+      "5",
+    );
 
-    this.patient = document.createElement("input");
-    this.patient.type = "text";
-    this.patient.placeholder = "Full name";
-    this.patient.classList.add("patient-visit");
+    this.patient = new Input("text", "fullName", "Full Name", "Full name");
 
-    this.age = document.createElement("input");
-    this.age.type = "number";
-    this.age.classList.add("age");
+    this.age = new Input("number", "age", "Age", "Age");
 
     this.submitBtn = document.createElement("button");
     this.submitBtn.type = "submit";
     this.submitBtn.textContent = "Create";
 
+    this.closeBtn = document.createElement("button");
+    this.closeBtn.classList.add("close-form");
+    this.closeBtn.textContent = "Close";
+    this.closeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      removeElToClass("modalDiv");
+    });
+
+    this.btnWrapper = document.createElement("div");
+    this.btnWrapper.classList.add("btn-wrapper");
+    this.btnWrapper.appendChild(this.submitBtn);
+    this.btnWrapper.appendChild(this.closeBtn);
+
     this.wrapper.appendChild(this.item);
+    this.wrapper.appendChild(this.cardInfo);
+    this.wrapper.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const data = CreateDataFromForm(this.wrapper);
+
+      postCard(data);
+    });
   }
 
   show() {
@@ -77,20 +95,17 @@ class VisitDantist extends Visit {
   constructor() {
     super(body);
 
-    this.wrapper = document.querySelector(".visit-form");
-    this.wrapper.innerHTML = "";
+    this.card = document.querySelector(".card-info");
+    this.card.innerHTML = "";
 
-    this.lastVisitDate = document.createElement("input");
-    this.lastVisitDate.type = "date";
-    this.lastVisitDate.classList.add("date-visit");
+    this.lastVisitDate = new Input("date", "lastVisit", "Your last Visit", "");
 
-    this.wrapper.appendChild(this.item);
-    this.wrapper.appendChild(this.patient);
-    this.wrapper.appendChild(this.targetOfVisit);
-    this.wrapper.appendChild(this.descriptionOfVisit);
-    this.wrapper.appendChild(this.priority);
-    this.wrapper.appendChild(this.lastVisitDate);
-    this.wrapper.appendChild(this.submitBtn);
+    this.card.appendChild(this.patient);
+    this.card.appendChild(this.targetOfVisit);
+    this.card.appendChild(this.descriptionOfVisit);
+    this.card.appendChild(this.priority);
+    this.card.appendChild(this.lastVisitDate);
+    this.card.appendChild(this.btnWrapper);
   }
 }
 
@@ -98,16 +113,15 @@ class VisitTerapist extends Visit {
   constructor(body) {
     super(body);
 
-    this.wrapper = document.querySelector(".visit-form");
-    this.wrapper.innerHTML = "";
+    this.card = document.querySelector(".card-info");
+    this.card.innerHTML = "";
 
-    this.wrapper.appendChild(this.item);
-    this.wrapper.appendChild(this.patient);
-    this.wrapper.appendChild(this.targetOfVisit);
-    this.wrapper.appendChild(this.descriptionOfVisit);
-    this.wrapper.appendChild(this.priority);
-    this.wrapper.appendChild(this.age);
-    this.wrapper.appendChild(this.submitBtn);
+    this.card.appendChild(this.patient);
+    this.card.appendChild(this.targetOfVisit);
+    this.card.appendChild(this.descriptionOfVisit);
+    this.card.appendChild(this.priority);
+    this.card.appendChild(this.age);
+    this.card.appendChild(this.btnWrapper);
   }
 }
 
@@ -115,31 +129,103 @@ class VisitCardiolog extends Visit {
   constructor(body) {
     super(body);
 
-    this.wrapper = document.querySelector(".visit-form");
-    this.wrapper.innerHTML = "";
+    this.card = document.querySelector(".card-info");
+    this.card.innerHTML = "";
 
-    this.normalPressure = document.createElement("input");
-    this.normalPressure.type = "number";
-    this.normalPressure.classList.add("pressure");
+    this.normalPressure = new Input(
+      "number",
+      "pressure",
+      "Pressure",
+      "Pressure",
+    );
 
-    this.weight = document.createElement("input");
-    this.weight.type = "number";
-    this.weight.classList.add("weight");
+    this.weight = new Input("number", "weight", " Weight", "Weight");
 
-    this.diseases = document.createElement("input");
-    this.diseases.type = "text";
-    this.diseases.classList.add("diseases");
+    this.diseases = new Input("text", "diseases", "Diseases", "Diseases");
 
-    this.wrapper.appendChild(this.item);
-    this.wrapper.appendChild(this.patient);
-    this.wrapper.appendChild(this.targetOfVisit);
-    this.wrapper.appendChild(this.descriptionOfVisit);
-    this.wrapper.appendChild(this.priority);
-    this.wrapper.appendChild(this.normalPressure);
-    this.wrapper.appendChild(this.weight);
-    this.wrapper.appendChild(this.diseases);
-    this.wrapper.appendChild(this.age);
-    this.wrapper.appendChild(this.submitBtn);
+    this.card.appendChild(this.patient);
+    this.card.appendChild(this.targetOfVisit);
+    this.card.appendChild(this.descriptionOfVisit);
+    this.card.appendChild(this.priority);
+    this.card.appendChild(this.normalPressure);
+    this.card.appendChild(this.weight);
+    this.card.appendChild(this.diseases);
+    this.card.appendChild(this.age);
+    this.card.appendChild(this.btnWrapper);
+  }
+}
+
+class Input {
+  constructor(type, name, labelName, placeholder) {
+    this.label = document.createElement("label");
+    this.label.for = name;
+
+    this.el = document.createElement("input");
+    this.el.type = type;
+    this.el.classList.add(name);
+    this.el.name = name;
+    this.el.setAttribute("placeholder", placeholder);
+
+    this.label.textContent = labelName;
+    this.label.appendChild(this.el);
+
+    return this.label;
+  }
+}
+
+class Select {
+  constructor(name, def, options) {
+    this.label = document.createElement("label");
+
+    this.el = document.createElement("select");
+    this.el.innerHTML = `
+      <option selected value="null">${def}</option>
+    `;
+    this.el.name = name;
+    options.forEach((option) => {
+      const el = document.createElement("option");
+      el.textContent = option;
+      el.value = option;
+      this.el.appendChild(el);
+    });
+
+    this.label.appendChild(this.el);
+
+    return this.label;
+  }
+}
+
+class TextArea {
+  constructor(name, labelName, cols, rows) {
+    this.label = document.createElement("label");
+    this.label.textContent = labelName;
+
+    this.el = document.createElement("textarea");
+    this.el.name = name;
+    this.el.cols = cols;
+    this.el.rows = rows;
+
+    this.label.appendChild(this.el);
+
+    return this.label;
+  }
+}
+
+async function postCard(card) {
+  const res = await fetch("https://ajax.test-danit.com/api/cards", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.token}`,
+    },
+    body: JSON.stringify(card),
+  });
+  const data = await res.json();
+
+  if (res.status === 200) {
+    removeElToClass("modalDiv");
+    console.log("ADD!!!");
+    // ВЫЗВАТЬ РЕНДЕР КАРТОЧЕК))))
   }
 }
 
@@ -149,4 +235,25 @@ function addVisitWindow(e) {
   const modal = new popUpModal(body);
   const visit = new Visit(modal.item);
   visit.show();
+}
+
+function CreateDataFromForm(form) {
+  const data = {};
+
+  for (let el of form) {
+    if (
+      el.tagName.toUpperCase() == "SELECT" ||
+      el.tagName.toUpperCase() == "INPUT" ||
+      el.tagName.toUpperCase() == "TEXTAREA"
+    ) {
+      data[el.name] = el.value;
+    }
+  }
+  return data;
+}
+
+function removeElToClass(elClass) {
+  const el = document.querySelector(`.${elClass}`);
+
+  el.remove();
 }
