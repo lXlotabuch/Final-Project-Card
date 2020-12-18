@@ -54,14 +54,14 @@ class Form {
 		this.item.insertAdjacentHTML(
 			'beforeend',
 			`<div class="wrapper-inputs">
-                        <label for="emailText">Email: </label>
-					    <input name="email" type="email" id="emailText" />
-                    </div>
-                    <div class="wrapper-inputs">
-                        <label for="passwordText">Password: </label>
-					    <input name="password" type="password" id="passwordText" />
-                    </div>
-					<button type="submit" name="send" class="submit-form">Подтвердить</button>`
+          <label for="emailText">Email: </label>
+          <input name="email" type="email" id="emailText" />
+        </div>
+        <div class="wrapper-inputs">
+          <label for="passwordText">Password: </label>
+          <input name="password" type="password" id="passwordText" />
+        </div>
+        <button type="submit" name="send" class="submit-form">Подтвердить</button>`
 		);
 		parentEl.appendChild(this.item);
 	}
@@ -160,6 +160,7 @@ function render(items) {
 		);
 		containerCards.appendChild(cardContainer);
 	});
+	console.log(items);
 }
 
 // function testDELETE(items) {
