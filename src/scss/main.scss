@@ -71,6 +71,13 @@ body {
 	width: 80%;
 	margin: 30px auto;
 }
+// .cards {
+// 	display: grid;
+// 	gap: 10px;
+// 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+// 	grid-column-gap: 30px;
+// 	margin: 30px auto;
+// }
 
 .card {
 	position: relative;
@@ -143,40 +150,39 @@ body {
 	}
 }
 
-
 // VISIT
 
 .visit-form,
-.card-info{
+.card-info {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
-.visit-form{
-	& label{
+.visit-form {
+	& label {
 		display: flex;
 		width: 100%;
 		justify-content: space-between;
 		margin-bottom: 5px;
 	}
 
-	& select{
+	& select {
 		margin: 0 auto;
 	}
 
 	& input,
-	& textarea{
+	& textarea {
 		min-width: 60%;
 		width: 60%;
 		justify-self: right;
 	}
 }
 
-.btn-wrapper{
+.btn-wrapper {
 	display: flex;
 	justify-content: space-around;
-	& button{
+	& button {
 		margin: 0 10px;
 	}
 }

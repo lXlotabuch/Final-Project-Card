@@ -3,7 +3,6 @@ const BtnLogin = document.querySelector('.btn-login');
 const BtnCreate = document.querySelector('.btn-create');
 const textNoItem = document.querySelector('.no-item');
 const filter = document.querySelector('.filter');
-const containerCards = document.querySelector('.cards');
 
 checkToken();
 
@@ -133,40 +132,23 @@ function checkToken() {
 		BtnLogin.style.display = 'none';
 		textNoItem.remove();
 		filter.style.display = 'flex';
-		getData(getToken);
+		// getData(getToken);
 	}
 }
-async function getData(token) {
-	const response = await fetch('https://ajax.test-danit.com/api/cards', {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-	const data = await response.json();
-
-	render(data);
-}
-function render(items) {
-	containerCards.innerHTML = '';
-	items.forEach((item) => {
-		let name = item.content.name;
-		let doctor = item.content.doctor;
-		const cardContainer = document.createElement('div');
-		cardContainer.classList.add('card');
-		cardContainer.insertAdjacentHTML(
-			'beforeend',
-			`	<p class="name">${name}</p>
-				<p class="doctor">${doctor}</p>`
-		);
-		containerCards.appendChild(cardContainer);
-	});
-	console.log(items);
-}
+// async function getData(token) {
+// 	const response = await fetch('https://ajax.test-danit.com/api/cards', {
+// 		headers: {
+// 			Authorization: `Bearer ${token}`,
+// 		},
+// 	});
+// 	const data = await response.json();
+// 	console.log(data);
+// }
 
 // function testDELETE(items) {
 // 	console.log(items);
 // }
-// fetch('https://ajax.test-danit.com/api/v2/cards/4116', {
+// fetch('https://ajax.test-danit.com/api/v2/cards/4234', {
 // 	method: 'DELETE',
 // 	headers: {
 // 		Authorization: 'Bearer 2c13322e-7afc-47be-aa96-4bda80f5585a',
