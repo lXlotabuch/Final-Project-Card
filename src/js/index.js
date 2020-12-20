@@ -1,9 +1,9 @@
-const body = document.querySelector('body');
-const BtnLogin = document.querySelector('.btn-login');
-const BtnCreate = document.querySelector('.btn-create');
-const textNoItem = document.querySelector('.no-item');
-const filter = document.querySelector('.filter');
-const containerCards = document.querySelector('.cards');
+const body = document.querySelector("body");
+const BtnLogin = document.querySelector(".btn-login");
+const BtnCreate = document.querySelector(".btn-create");
+const textNoItem = document.querySelector(".no-item");
+const filter = document.querySelector(".filter");
+const containerCards = document.querySelector(".cards");
 
 checkToken();
 
@@ -15,7 +15,7 @@ checkToken();
 // 		name: 'John Dye',
 // 		doctor: 'Pediatr',
 // 	};
-// 	const response = await fetch('https://ajax.test-danit.com/api/v2/cards', {
+// 	const response = await fetch('https://ajax.test-danit.com/api/cards', {
 // 		method: 'POST',
 // 		headers: {
 // 			'Content-Type': 'application/json',
@@ -35,25 +35,25 @@ checkToken();
 // ------------------------------------------------------------------------------------
 
 class popUpModal {
-	constructor(parentEl) {
-		this.item = document.createElement('div');
-		this.item.classList.add('modalDiv');
-		this.item.classList.add('animatePopUp');
-		parentEl.append(this.item);
-	}
+  constructor(parentEl) {
+    this.item = document.createElement("div");
+    this.item.classList.add("modalDiv");
+    this.item.classList.add("animatePopUp");
+    parentEl.append(this.item);
+  }
 
-	get() {
-		return this.item;
-	}
+  get() {
+    return this.item;
+  }
 }
 
 class Form {
-	constructor(parentEl) {
-		this.item = document.createElement('form');
-		this.item.classList.add('form-E-P');
-		this.item.insertAdjacentHTML(
-			'beforeend',
-			`<div class="wrapper-inputs">
+  constructor(parentEl) {
+    this.item = document.createElement("form");
+    this.item.classList.add("form-E-P");
+    this.item.insertAdjacentHTML(
+      "beforeend",
+      `<div class="wrapper-inputs">
           <label for="emailText">Email: </label>
           <input name="email" type="email" id="emailText" />
         </div>
@@ -61,112 +61,115 @@ class Form {
           <label for="passwordText">Password: </label>
           <input name="password" type="password" id="passwordText" />
         </div>
-        <button type="submit" name="send" class="submit-form">Подтвердить</button>`
-		);
-		parentEl.appendChild(this.item);
-	}
+        <button type="submit" name="send" class="submit-form">Подтвердить</button>`,
+    );
+    parentEl.appendChild(this.item);
+  }
 
-	get() {
-		return this.item;
-	}
+  get() {
+    return this.item;
+  }
 }
 
-BtnLogin.addEventListener('click', runWindow);
+BtnLogin.addEventListener("click", runWindow);
 
 function runWindow() {
-	const popUp = new popUpModal(body);
-	const PopUpWindow = popUp.get();
-	const form = new Form(PopUpWindow);
-	const formConfrimCheck = form.get();
+  const popUp = new popUpModal(body);
+  const PopUpWindow = popUp.get();
+  const form = new Form(PopUpWindow);
+  const formConfrimCheck = form.get();
 
-	AuthorizationCall(formConfrimCheck, PopUpWindow);
+  AuthorizationCall(formConfrimCheck, PopUpWindow);
 }
 
 function AuthorizationCall(formConfrimCheck, PopUpWindow) {
-	formConfrimCheck.addEventListener('submit', async function (e) {
-		e.preventDefault();
-		let inputEmailValue = formConfrimCheck.children[0].children[1];
-		let passwordInput = formConfrimCheck.children[1].children[1];
-		let emailValue = inputEmailValue.value;
-		let passwordValue = passwordInput.value;
+  formConfrimCheck.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    let inputEmailValue = formConfrimCheck.children[0].children[1];
+    let passwordInput = formConfrimCheck.children[1].children[1];
+    let emailValue = inputEmailValue.value;
+    let passwordValue = passwordInput.value;
 
-		const authObj = {
-			email: emailValue,
-			password: passwordValue,
-		};
+    const authObj = {
+      email: emailValue,
+      password: passwordValue,
+    };
 
-		if (inputEmailValue.value.trim() === '') {
-			inputEmailValue.value = '';
-			return;
-		}
+    if (inputEmailValue.value.trim() === "") {
+      inputEmailValue.value = "";
+      return;
+    }
 
-		const response = await fetch(
-			'https://ajax.test-danit.com/api/cards/login',
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
+    const response = await fetch(
+      "https://ajax.test-danit.com/api/cards/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-				body: JSON.stringify(authObj),
-			}
-		);
+        body: JSON.stringify(authObj),
+      },
+    );
 
-		const data = await response.text();
+    const data = await response.text();
 
-		if (response.status === 200) {
-			localStorage.setItem('token', data);
-			checkToken();
-			removeElement(PopUpWindow);
-		}
-	});
+    if (response.status === 200) {
+      localStorage.setItem("token", data);
+      checkToken();
+      removeElement(PopUpWindow);
+    }
+  });
 }
 function removeElement(el) {
-	el.remove();
+  el.remove();
 }
 
 function checkToken() {
-	let getToken = localStorage.getItem('token');
+  let getToken = localStorage.getItem("token");
 
-	if (getToken) {
-		BtnCreate.style.display = 'block';
-		BtnLogin.style.display = 'none';
-		textNoItem.remove();
-		filter.style.display = 'flex';
-		getData(getToken);
-	}
+  if (getToken) {
+    BtnCreate.style.display = "block";
+    BtnLogin.style.display = "none";
+    textNoItem.remove();
+    filter.style.display = "flex";
+    getData(getToken);
+  }
 }
 async function getData(token) {
-	const response = await fetch('https://ajax.test-danit.com/api/cards', {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-	const data = await response.json();
+  const response = await fetch("https://ajax.test-danit.com/api/cards", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await response.json();
 
-	render(data);
+  render(data);
 }
 function render(items) {
-	containerCards.innerHTML = '';
-	items.forEach((item) => {
-		let name = item.content.name;
-		let doctor = item.content.doctor;
-		const cardContainer = document.createElement('div');
-		cardContainer.classList.add('card');
-		cardContainer.insertAdjacentHTML(
-			'beforeend',
-			`	<p class="name">${name}</p>
-				<p class="doctor">${doctor}</p>`
-		);
-		containerCards.appendChild(cardContainer);
-	});
-	console.log(items);
+  containerCards.innerHTML = "";
+  console.log(items);
+  items.forEach((item) => {
+    let name = item.content.fullName;
+    let doctor = item.content.doctor;
+    const cardContainer = document.createElement("div");
+    cardContainer.classList.add("card");
+    cardContainer.insertAdjacentHTML(
+      "beforeend",
+      `	<p class="name">${name}</p>
+		<p class="doctor">${doctor}</p>
+		<a href="#" class="show-more">Show more</a>
+		<a href="#" class="close-btn">X</a>`,
+    );
+    containerCards.appendChild(cardContainer);
+  });
+  console.log(items);
 }
 
 // function testDELETE(items) {
 // 	console.log(items);
 // }
-// fetch('https://ajax.test-danit.com/api/v2/cards/4116', {
+// fetch('https://ajax.test-danit.com/api/cards/4116', {
 // 	method: 'DELETE',
 // 	headers: {
 // 		Authorization: 'Bearer 2c13322e-7afc-47be-aa96-4bda80f5585a',
