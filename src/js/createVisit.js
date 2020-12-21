@@ -308,7 +308,6 @@ async function postCard(card) {
 		body: JSON.stringify(card),
 	});
 	const data = await res.json();
-	console.log(data);
 
 	if (res.status === 200) {
 		removeElToClass('modalDiv');
@@ -352,9 +351,39 @@ function render(item) {
 
 	const cardContainer = document.createElement('div');
 	cardContainer.classList.add('card');
+	cardContainer.dataset.id = item.id;
+	// edit info
+	const editInfoContainer = document.createElement('div');
+	editInfoContainer.classList.add('editInfoContainer');
+
+	const btnEdit = document.createElement('button');
+	btnEdit.classList.add('edit');
+	btnEdit.textContent = 'Редактировать';
+	btnEdit.classList.add('edit');
+	editInfoContainer.appendChild(btnEdit);
+
+	const popUpchose = document.createElement('div');
+	popUpchose.classList.add('popUpchose');
+	popUpchose.setAttribute('hidden', true);
+
+	const deleteCard = document.createElement('button');
+	deleteCard.classList.add('deleteCard');
+	deleteCard.textContent = 'Удалить карточку';
+
+	const editCard = document.createElement('button');
+	editCard.classList.add('editCard');
+	editCard.textContent = 'Редактировать карточку';
+	popUpchose.appendChild(editCard);
+	popUpchose.appendChild(deleteCard);
+
+	editInfoContainer.appendChild(popUpchose);
+	cardContainer.appendChild(editInfoContainer);
+
+	// --------------
+
 	cardContainer.insertAdjacentHTML(
 		'beforeend',
-		`		<button class="edit">Редактировать</button>
+		`		
 				<p class="name">${name}</p>
 				<p class="doctor">${doctor}</p>
 				<button class="showMore">Показать больше</button>
@@ -372,6 +401,33 @@ function render(item) {
 	containerCards.appendChild(cardContainer);
 
 	showInformation();
+	// Edit information
+	editInfo(btnEdit, deleteCard, cardContainer);
+}
+function editInfo(btnEdit, deleteCard, cardContainer) {
+	btnEdit.addEventListener('click', function (e) {
+		let currentBtn = e.target;
+		currentBtn.hidden = true;
+		const popUpOptions = currentBtn.nextElementSibling;
+		popUpOptions.hidden = false;
+	});
+
+	deleteCard.addEventListener('click', function () {
+		let id = cardContainer.getAttribute('data-id');
+		let url = 'https://ajax.test-danit.com/api/v2/cards/';
+		deleteItem(url, id, cardContainer);
+	});
+}
+async function deleteItem(url, id, cardContainer) {
+	const res = await fetch(`${url}${id}`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('token')}`,
+		},
+	});
+	if (res.status === 200) {
+		cardContainer.remove();
+	}
 }
 
 function showInformation() {
@@ -427,7 +483,3 @@ function removeElToClass(elClass) {
 
 	el.remove();
 }
-
-// CHANGE INFO IN CARDS
-const editInfo = document.querySelector('.edit');
-console.log(editInfo);
