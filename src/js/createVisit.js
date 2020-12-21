@@ -1,6 +1,10 @@
 const btnCreate = document.querySelector('.btn-create');
 btnCreate.addEventListener('click', addVisitWindow);
 const containerCards = document.querySelector('.cards');
+// filter card
+const searchInput = document.querySelector('.search-input');
+const submitSearch = document.querySelector('.submit');
+const selectPriority = document.querySelector('.priority');
 
 document.addEventListener('DOMContentLoaded', async function () {
 	if (localStorage.token) {
@@ -233,6 +237,67 @@ class TextArea {
 	}
 }
 
+// filtered by search input
+
+// ------------------------------------------------------------------------------------
+(async () => {
+	const res = await fetch('https://ajax.test-danit.com/api/cards', {
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.token}`,
+		},
+	});
+	const data = await res.json();
+	console.log(data);
+
+	let searchInputValue = '';
+	let selectPriorityValue = '';
+
+	searchInput.addEventListener('keyup', updateSearchInput);
+
+	selectPriority.addEventListener('change', function (e) {
+		selectPriorityValue = e.target.value.toLowerCase();
+		filter(data);
+	});
+
+	function updateSearchInput(e) {
+		searchInputValue = e.target.value.toLowerCase();
+		filter(data);
+	}
+	function filter(data) {
+		if (searchInputValue.length < 2) {
+			containerCards.innerHTML = '';
+
+			data.forEach((item) => {
+				render(item);
+			});
+		}
+		const filtered = data.filter((item) => {
+			if (
+				searchInputValue.length > 2 &&
+				!item.content.doctor.toLowerCase().includes(searchInputValue)
+			) {
+				return false;
+			}
+			if (!item.content.priority.toLowerCase().includes(selectPriorityValue)) {
+				return false;
+			}
+			return true;
+		});
+
+		submitSearch.addEventListener('click', function (e) {
+			e.preventDefault();
+
+			containerCards.innerHTML = '';
+			filtered.forEach((item) => {
+				render(item);
+			});
+		});
+	}
+})();
+
+// ------------------------------------------------------------------------------------
+
 async function postCard(card) {
 	const res = await fetch('https://ajax.test-danit.com/api/cards', {
 		method: 'POST',
@@ -259,11 +324,38 @@ function render(item) {
 	let diseases = item.content.diseases;
 	let targetOfVisit = item.content.targetOfVisit;
 	let priority = item.content.priority;
+
+	if (name === undefined || name === '') {
+		name = 'Информация не указана';
+	}
+	if (doctor === undefined || doctor === '') {
+		doctor = 'Информация не указана';
+	}
+	if (age === undefined || age === '') {
+		age = 'Информация не указана';
+	}
+	if (pressure === undefined || pressure === '') {
+		pressure = 'Информация не указана';
+	}
+	if (weight === undefined || weight === '') {
+		weight = 'Информация не указана';
+	}
+	if (diseases === undefined || diseases === '') {
+		diseases = 'Информация не указана';
+	}
+	if (targetOfVisit === undefined || targetOfVisit === '') {
+		targetOfVisit = 'Информация не указана';
+	}
+	if (priority === undefined || priority === '' || priority === 'null') {
+		priority = 'Информация не указана';
+	}
+
 	const cardContainer = document.createElement('div');
 	cardContainer.classList.add('card');
 	cardContainer.insertAdjacentHTML(
 		'beforeend',
-		`	<p class="name">${name}</p>
+		`		<button class="edit">Редактировать</button>
+				<p class="name">${name}</p>
 				<p class="doctor">${doctor}</p>
 				<button class="showMore">Показать больше</button>
 				<div class="hiddenInfo" hidden>
@@ -273,8 +365,9 @@ function render(item) {
 					<p class="targetVisit">Цель визита:${targetOfVisit}</p>
 					<p class="diseases">Список⠀болезней:${diseases}</p>
 					<p class="priority">Приоритетность:${priority}</p>
-					<button class="closeInfo" >Свернуть</button>
-				</div>`
+					<button class="closeInfo">Свернуть</button>
+				</div>
+				`
 	);
 	containerCards.appendChild(cardContainer);
 
@@ -289,7 +382,7 @@ function showInformation() {
 		) {
 			e.target.setAttribute('hidden', false);
 			const parentEl = e.target.closest('div');
-			const toggleInfoDiv = parentEl.children[3];
+			const toggleInfoDiv = parentEl.children[4];
 			toggleInfoDiv.hidden = false;
 		}
 
@@ -298,7 +391,7 @@ function showInformation() {
 			e.target.className === 'closeInfo'
 		) {
 			const parelBtn = e.target.closest('div');
-			const btnShow = parelBtn.parentNode.children[2];
+			const btnShow = parelBtn.parentNode.children[3];
 			btnShow.hidden = false;
 			const hideInfo = e.target.parentNode;
 			hideInfo.hidden = true;
@@ -334,3 +427,7 @@ function removeElToClass(elClass) {
 
 	el.remove();
 }
+
+// CHANGE INFO IN CARDS
+const editInfo = document.querySelector('.edit');
+console.log(editInfo);
