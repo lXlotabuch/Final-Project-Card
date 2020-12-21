@@ -402,9 +402,15 @@ function render(item) {
 
 	showInformation();
 	// Edit information
-	editInfo(btnEdit, deleteCard, cardContainer);
+	editInfo(btnEdit, deleteCard, cardContainer, editCard);
 }
-function editInfo(btnEdit, deleteCard, cardContainer) {
+function editInfo(btnEdit, deleteCard, cardContainer, editCard) {
+	// edit info to cards
+	editCard.addEventListener('click', function () {
+		console.log('Anton Help!!!!!');
+	});
+
+	// delete Items from server
 	btnEdit.addEventListener('click', function (e) {
 		let currentBtn = e.target;
 		currentBtn.hidden = true;
@@ -459,6 +465,7 @@ function addVisitWindow(e) {
 	e.preventDefault();
 
 	const modal = new popUpModal(body);
+
 	const visit = new Visit(modal.item);
 	visit.show();
 }
