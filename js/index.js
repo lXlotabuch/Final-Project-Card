@@ -25,18 +25,7 @@ const textNoItem = document.querySelector(".no-item");
 const filter = document.querySelector(".filter");
 
 // CHECK TOKEN AND ADDD CARDS
-document.addEventListener("DOMContentLoaded", async function () {
-  if (localStorage.token) {
-    const data = await getItemsFromSer();
-    btnCreate.style.display = "block";
-    btnLogin.style.display = "none";
-    textNoItem.remove();
-    filter.style.display = "flex";
-    data.forEach((item) => {
-      render(item);
-    });
-  }
-});
+document.addEventListener("DOMContentLoaded", checkToken);
 
 btnCreate.addEventListener("click", addVisitWindow);
 
@@ -119,4 +108,18 @@ async function filtered(e) {
   dataNew.forEach((item) => {
     render(item);
   });
+}
+
+// CHECK TOKEN
+async function checkToken() {
+  if (localStorage.token) {
+    const data = await getItemsFromSer();
+    btnCreate.style.display = "block";
+    btnLogin.style.display = "none";
+    textNoItem.remove();
+    filter.style.display = "flex";
+    data.forEach((item) => {
+      render(item);
+    });
+  }
 }
