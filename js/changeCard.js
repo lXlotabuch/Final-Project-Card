@@ -26,7 +26,7 @@ export async function changeCard(e) {
   } = cardInfo.content;
 
   changeForm.submitBtn.addEventListener("click", (e) => {
-    newCardPut(changeForm.card, card, modal);
+    newCardPut(changeForm.card, card, cardInfo);
   });
 
   changeForm.patient.lastChild.value = fullName;
@@ -39,8 +39,8 @@ export async function changeCard(e) {
   changeForm.targetOfVisit.lastChild.value = targetOfVisit;
 }
 
-async function newCardPut(form, card) {
-  const data = {};
+async function newCardPut(form, card, cardInfo) {
+  const data = {...cardInfo.content};
   for (let el of form.children) {
     el = el.lastChild;
     if (
