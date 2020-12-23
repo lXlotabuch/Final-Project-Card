@@ -114,7 +114,7 @@ function showInformation(e) {
     e.target.nodeName.toLowerCase() === "button" &&
     e.target.className === "showMore"
   ) {
-    const card = e.path[1];
+    const card = e.target.parentNode;
     e.target.setAttribute("hidden", false);
     const parentEl = e.target.closest("div");
     const toggleInfoDiv = parentEl.children[4];
@@ -126,7 +126,7 @@ function showInformation(e) {
     e.target.nodeName.toLowerCase() === "button" &&
     e.target.className === "closeInfo"
   ) {
-    const card = e.path[2];
+    const card = e.target.parentNode.parentNode;
     const parelBtn = e.target.closest("div");
     const btnShow = parelBtn.parentNode.children[3];
     btnShow.hidden = false;
