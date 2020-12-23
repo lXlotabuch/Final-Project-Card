@@ -93,12 +93,12 @@ async function filtered(e) {
   const dataNew = data.filter((item) => {
     if (
       searchInput.value.length > 2 &&
-      !item.content.doctor.toLowerCase().includes(searchInput.value)
+      !item.content.doctor.toLowerCase().includes(searchInput.value.toLowerCase())
     ) {
       return false;
     }
     if (selectPriority.value != "null") {
-      if (!item.content.priority.toLowerCase().includes(selectPriority.value)) {
+      if (!item.content.priority.toLowerCase().includes(selectPriority.value.toLowerCase())) {
         return false;
       }
     }
